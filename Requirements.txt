@@ -1,0 +1,3 @@
+- Need a simple frontend - probably js
+- Need a backend - nodejs
+-  Need a database - SQL

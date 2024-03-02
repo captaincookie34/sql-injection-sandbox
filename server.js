@@ -1,0 +1,38 @@
+const express = require('express')
+const app = express()
+const port = 3000;
+const path = require('path')
+const bodyParser = require('body-parser')
+
+
+app.use(bodyParser.urlencoded({ extended: false }));
+
+
+app.get('/', (req, res) => {
+    //res.send('Welcome to sample server');
+    res.sendFile(
+        path.join(__dirname, '/static/index.html')
+        );
+});
+
+app.get('/login', (req, res) => {
+    //res.send('Welcome to sample server');
+    res.sendFile(
+        path.join(__dirname, '/static/login.html')
+        );
+});
+
+
+app.post('/submit', (req, res) => {
+    let username = req.body.username;
+    let password = req.body.password;
+    console.log(`Username: ${username}`);
+    console.log(`Password: ${password}`);
+    res.sendFile(
+        path.join(__dirname, '/static/home.html')
+        );
+  });
+
+app.listen(port, () => {
+    console.log(`Server is running on port: ${port}`);
+})

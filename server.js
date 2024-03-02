@@ -5,7 +5,9 @@ const path = require('path')
 const bodyParser = require('body-parser')
 
 
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(express.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(express.static('public'));
 
 
 app.get('/', (req, res) => {
@@ -24,14 +26,17 @@ app.get('/login', (req, res) => {
 
 
 app.post('/submit', (req, res) => {
-    let username = req.body.username;
-    let password = req.body.password;
-    console.log(`Username: ${username}`);
-    console.log(`Password: ${password}`);
-    res.sendFile(
-        path.join(__dirname, '/static/home.html')
-        );
+    console.log(req.body)
+    let username = req.body.username
+    res.redirect(`/home?username=${username}`)
   });
+
+
+  app.get('/home', (req, res) => {
+    const username = req.query.username;
+    res.sendFile(path.join(__dirname, '/static/home.html'));
+});
+
 
 app.listen(port, () => {
     console.log(`Server is running on port: ${port}`);

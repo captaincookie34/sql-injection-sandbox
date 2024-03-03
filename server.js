@@ -4,7 +4,6 @@ const port = 3000;
 const path = require('path')
 const bodyParser = require('body-parser')
 
-
 app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static('public'));

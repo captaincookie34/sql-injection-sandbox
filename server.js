@@ -4,7 +4,7 @@ const port = 3000;
 const path = require('path')
 const bodyParser = require('body-parser')
 
-const { getUsers } = require('./database.js');
+const { getUsers, authenticateUser } = require('./database.js');
 
 app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -30,10 +30,24 @@ app.get('/allusers', async (req, res) => {
     res.send(users)
 });
 
-app.post('/submit', (req, res) => {
+app.post('/submit', async (req, res) => {
     console.log(req.body)
     let username = req.body.username
-    res.redirect(`/home?username=${username}`)
+    let password = req.body.password
+
+    try {
+        const isAuthenticated = await authenticateUser(username, password);
+
+        if (isAuthenticated) {
+            res.redirect(`/home?username=${username}`);
+        } else {
+            res.redirect('/login?error=Invalid username or password');
+        }
+    } catch (error) {
+        console.error("Error authenticating user:", error);
+        res.redirect('/login?error=An error occurred while authenticating');
+    }
+
   });
 
 

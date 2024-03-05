@@ -14,9 +14,25 @@ async function getUsers() {
     return rows
 }
 
+async function authenticateUser(username, password) {
+  const connection = await pool.getConnection();
+      try {
+        const [rows] = await connection.execute(
+            `SELECT * FROM users WHERE username = '${username}' AND password = '${password}'`
+        );
+        return rows.length > 0;
+    } finally {
+        connection.release();
+    }
+}
 
-getUsers().then(result => {
-  console.log(result)
-}).catch(error => {
-  console.error("Error fetching data:", error);
-});
+module.exports = {
+  getUsers,
+  authenticateUser
+};
+
+// getUsers().then(result => {
+//   console.log(result)
+// }).catch(error => {
+//   console.error("Error fetching data:", error);
+// });

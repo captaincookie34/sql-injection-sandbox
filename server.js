@@ -4,6 +4,8 @@ const port = 3000;
 const path = require('path')
 const bodyParser = require('body-parser')
 
+const { getUsers } = require('./database.js');
+
 app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static('public'));
@@ -23,6 +25,10 @@ app.get('/login', (req, res) => {
         );
 });
 
+app.get('/allusers', async (req, res) => {
+    const users = await getUsers()
+    res.send(users)
+});
 
 app.post('/submit', (req, res) => {
     console.log(req.body)

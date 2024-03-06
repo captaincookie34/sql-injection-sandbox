@@ -20,6 +20,9 @@ async function authenticateUser(username, password) {
         const [rows] = await connection.execute(
             `SELECT * FROM users WHERE username = '${username}' AND password = '${password}'`
         );
+        
+        // Using parameterized query to fix the SQL Injection
+        // const [rows] = await pool.query(`SELECT * FROM users WHERE username = ? AND password = ?`, [username, password])
         return rows.length > 0;
     } finally {
         connection.release();

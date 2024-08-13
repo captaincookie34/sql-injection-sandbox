@@ -6,6 +6,9 @@ const bodyParser = require('body-parser')
 
 const { getUsers, authenticateUser } = require('./database.js');
 
+app.set('view engine', 'ejs');
+app.set('views', __dirname + '/views');
+
 app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static('public'));
@@ -30,10 +33,10 @@ app.get('/allusers', async (req, res) => {
     res.send(users)
 });
 
-app.post('/submit', async (req, res) => {
-    console.log(req.body)
-    let username = req.body.username
-    let password = req.body.password
+
+  app.post('/submit', async (req, res) => {
+    let username = req.body.username;
+    let password = req.body.password;
 
     try {
         const isAuthenticated = await authenticateUser(username, password);
@@ -41,14 +44,13 @@ app.post('/submit', async (req, res) => {
         if (isAuthenticated) {
             res.redirect(`/home?username=${username}`);
         } else {
-            res.redirect('/login?error=Invalid username or password');
+            res.render('login', { error: 'Invalid username or password' });
         }
     } catch (error) {
-        console.error("Error authenticating user:", error);
-        res.redirect('/login?error=An error occurred while authenticating');
+        res.render('login', { error: `An error occurred while authenticating: ${error.message}` });
     }
+});
 
-  });
 
 
   app.get('/home', (req, res) => {
